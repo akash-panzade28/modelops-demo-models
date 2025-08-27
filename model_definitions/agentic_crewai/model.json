@@ -1,0 +1,6 @@
+{
+    "id": job_id,
+    "name": "Agentic AI using CrewAI",
+    "description": "Demo Agentic AI",
+    "language": "python"
+}
