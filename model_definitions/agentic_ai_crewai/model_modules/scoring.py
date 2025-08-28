@@ -14,7 +14,7 @@ warnings.simplefilter(action='ignore', category=UserWarning)
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 def score(context: ModelContext, **kwargs):
-    aoa_create_context()
+    # aoa_create_context()
     print("started_scoring")
     os.environ["GROQ_API_KEY"] = "gsk_"
     model = "groq/openai/gpt-oss-20b"
