@@ -13,5 +13,5 @@ import json
 from tmo import ModelContext
 
 def train(context: ModelContext, **kwargs):
-    aoa_create_context()
+    # aoa_create_context()
     print("Training")
