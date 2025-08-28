@@ -13,5 +13,5 @@ from tmo import ModelContext, tmo_create_context
 from typing import Dict, List, Any
 
 def evaluate(context: ModelContext, **kwargs):
-    tmo_create_context(context)
+    # tmo_create_context(context)
     print("Evaluting")
