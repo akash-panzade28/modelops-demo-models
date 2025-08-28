@@ -1,5 +1,5 @@
 {
-    "id": 'ac94bc44-3c0d-4072-a79d-b2fcfef04244',
+    "id": "ac94bc44-3c0d-4072-a79d-b2fcfef04244",
     "name": "LangChain Chat Agent",
     "description": "LangChain-based conversational agent for interactive chat",
     "language": "python"
