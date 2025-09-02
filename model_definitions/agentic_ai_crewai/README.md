@@ -7,7 +7,7 @@ This model leverages the CrewAI framework to perform collaborative tasks using a
 ## Model Description
 
 - **Name**: crewai Chat Agent
-- **ID**: ac94bc44-3c0d-4072-a79d-b2fcfef04244
+- **ID**: edee4869-5e7e-476c-8920-0fbf321b7b10
 - **Language**: Python
 - **Framework**: CrewAI
 - **Purpose**: Collaborative content research and summarization
