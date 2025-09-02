@@ -1,63 +1,69 @@
 import warnings
-import os
+import json
+from langchain_nvidia_ai_endpoints import ChatNVIDIA
 from crewai import Agent, Task, Crew, LLM
-from groq import Groq
-# from aoa import (
-#     record_scoring_stats,
-#     aoa_create_context,
-#     ModelContext
-# )
-from tmo import ModelContext
-
 warnings.filterwarnings('ignore')
 warnings.simplefilter(action='ignore', category=DeprecationWarning)
 warnings.simplefilter(action='ignore', category=UserWarning)
 warnings.simplefilter(action='ignore', category=FutureWarning)
+class ModelScorer(object):
+    """
+    Model scorer using CrewAI agents for collaborative tasks.
+    """
+    def __init__(self):
+        """Initialize CrewAI agents and tasks based on config."""
 
-def score(context: ModelContext, **kwargs):
-    # aoa_create_context()
-    print("started_scoring")
-    os.environ["GROQ_API_KEY"] = "gsk_"
-    model = "groq/openai/gpt-oss-20b"
-    llm = LLM(
-        model=model,
-        max_completion_tokens=1024
-    )
+        with open("artifacts/input/model_config.json", "r") as f:
+            config = json.load(f)
 
-    researcher = Agent(
-        role='Senior Research Analyst',
-        goal='Discover new insights',
-        backstory="You're an expert at finding interesting information",
-        llm=llm,
-        verbose=True
-    )
+        self.llm = LLM(
+            model=f"nvidia_nim/{config['LLM_MODEL']}",
+            base_url=config["LLM_BASE_URL"],
+            api_key=config["LLM_API_KEY"],
+        )
 
-    writer = Agent(
-        role='Content Writer',
-        goal='Write engaging content',
-        backstory="You're a talented writer who simplifies complex information",
-        llm=llm,
-        verbose=True
-    )
+        self.researcher = Agent(
+            role='Senior Research Analyst',
+            goal='Discover new insights',
+            backstory="You're an expert at finding interesting information",
+            llm=self.llm,
+            verbose=True
+        )
 
-    research_task = Task(
-        description='Find interesting facts about AI in healthcare',
-        agent=researcher,
-        expected_output="A list of interesting facts about AI applications in healthcare."
-    )
-
-    write_task = Task(
-        description='Write a short blog post about AI in healthcare',
-        agent=writer,
-        expected_output="A concise blog post (~50 words) about AI's impact on healthcare.")
-
-    crew = Crew(
-        agents=[researcher, writer],
-        tasks=[research_task, write_task],
-        verbose=True
-    )
-
-    result = crew.kickoff()
-    print("CrewAI Result:\n", result)
-
-    print("Scoring")
+        self.writer = Agent(
+            role='Content Writer',
+            goal='Write engaging content',
+            backstory="You're a talented writer who simplifies complex information",
+            llm=self.llm,
+            verbose=True
+        )
+    def build_tasks(self, user_query):
+        """Build tasks dynamically based on user query."""
+        self.research_task = Task(
+            description=f'Find information about: {user_query}',
+            agent=self.researcher,
+            expected_output=f"A list of key facts about: {user_query}"
+        )
+        self.write_task = Task(
+            description=f'Write a short summary about: {user_query}',
+            agent=self.writer,
+            expected_output=f"A concise summary (~100 words) about: {user_query}"
+        )
+        self.crew = Crew(
+            agents=[self.researcher, self.writer],
+            tasks=[self.research_task, self.write_task],
+            verbose=True
+        )
+    def invoke(self, query):
+        """
+        Run the CrewAI workflow and return the result (synchronous).
+        """
+        try:
+            self.build_tasks(query)
+            print(f"Started scoring with CrewAI agents for query: {query} ...")
+            result = self.crew.kickoff()
+            print("CrewAI Result:\n", result)
+            return result.json_dict
+        except Exception as e:
+            print("Error occurred while invoking CrewAI:", e)
+            return {"error": str(e)}

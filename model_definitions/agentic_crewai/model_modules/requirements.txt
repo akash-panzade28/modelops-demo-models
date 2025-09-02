@@ -1,6 +1,0 @@
-teradataml
-langchain-community
-langchain
-crewai
-openai
-groq

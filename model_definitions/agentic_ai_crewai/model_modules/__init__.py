@@ -1,7 +1,7 @@
 """
-crewai Agent Model Modules
+LangChain Agent Model Modules
 
-This package contains the core components for the agent:
+This package contains the core components for the LangChain conversational agent:
 - scoring.py: Main agent implementation with ModelScorer class
 - training.py: Setup and validation module  
 - evaluation.py: Agent performance evaluation

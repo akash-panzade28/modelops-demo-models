@@ -1,6 +1,6 @@
 {
-    "id": "ac94bc44-3c0d-4072-a79d-b2fcfef04244",
-    "name": "crewai Chat Agent",
-    "description": "crewai-based conversational agent for interactive chat",
+    "id": "edee4869-5e7e-476c-8920-0fbf321b7b10",
+    "name": "CrewAI Agent_demo",
+    "description": "CrewAI agent for interactive chat",
     "language": "python"
 }
